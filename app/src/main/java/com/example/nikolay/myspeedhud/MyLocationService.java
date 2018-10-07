@@ -5,21 +5,63 @@ import android.app.Service;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
-public class MyLocationService extends Service implements android.location.LocationListener {
+public class MyLocationService extends Service implements LocationListener{
+
+    private static final String TAG = MyLocationService.class.getSimpleName();
 
     private static LocationServiceDisplay locationServiceDisplay;
-
-    // private static final int UPDATE_INERVAL = 10 * 1000;
     private static final int FASTEST_INTERVAL = 2 * 1000;
-    private static final float MINIMAL_DISTANCE = 10 * 1000f;
+    private static final float MINIMAL_DISTANCE = 10f;
 
     LocationManager locationManager;
+    LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            if(prevLoc != null && location != null){
+                distance += prevLoc.distanceTo(location);
+            }
+            prevLoc = location;
+
+            if(locationServiceDisplay != null && location != null){
+                locationServiceDisplay.update(location, distance);
+            }
+
+            Log.i(TAG, "Location changed");
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+            checkEnabled();
+            Log.i(TAG, s + "//" + i + "Status changed");
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+            Log.i(TAG, "Enabled: " + s);
+            @SuppressLint("MissingPermission")
+            Location location = locationManager.getLastKnownLocation(s);
+            if(location != null) {
+                locationServiceDisplay.update(location, distance);
+            }
+            checkEnabled();
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+            checkEnabled();
+            Log.i(TAG, "Disabled: " + s);
+        }
+    };
+    Location prevLoc;
+
+    double distance = 0;
 
     public MyLocationService() {
 
@@ -44,10 +86,11 @@ public class MyLocationService extends Service implements android.location.Locat
             // for ActivityCompat#requestPermissions for more details.
 
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, FASTEST_INTERVAL, MINIMAL_DISTANCE, this);
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, FASTEST_INTERVAL, MINIMAL_DISTANCE, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, FASTEST_INTERVAL, MINIMAL_DISTANCE, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, FASTEST_INTERVAL, MINIMAL_DISTANCE, locationListener);
+        checkEnabled();
 
-        Log.i("INFO", locationManager.getProviders(true).toString());
+        Log.i(TAG, locationManager.getProviders(true).toString());
 
 
         return Service.START_STICKY;
@@ -66,40 +109,58 @@ public class MyLocationService extends Service implements android.location.Locat
 
     @Override
     public void onLocationChanged(Location location) {
+
+        if(prevLoc != null && location != null){
+            distance += prevLoc.distanceTo(location);
+        }
+        prevLoc = location;
+
         if(locationServiceDisplay != null && location != null){
-            locationServiceDisplay.update(location);
+            locationServiceDisplay.update(location, distance);
         }
 
-        Log.i("INFO", "Location changed");
+        Log.i(TAG, "Location changed");
 
     }
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
-        Log.i("INFO", s + "//" + i + "Status changed");
+        Log.i(TAG, s + "//" + i + "Status changed");
     }
 
     @SuppressLint("MissingPermission")
     @Override
     public void onProviderEnabled(String s) {
-        Log.i("INFO", "Enabled: " + s);
-        locationServiceDisplay.update(locationManager.getLastKnownLocation(s));
+        Log.i(TAG, "Enabled: " + s);
+        Location location = locationManager.getLastKnownLocation(s);
+        if(location != null) {
+            locationServiceDisplay.update(location, distance);
+        }
 
     }
 
     @Override
     public void onProviderDisabled(String s) {
-        Log.i("INFO", "Disabled: " + s);
+        Log.i(TAG, "Disabled: " + s);
     }
 
     //Интерфейс для отоброжения обновленной информации о позиции устройства
 
     interface LocationServiceDisplay {
-        public void update(Location location);
+        public void update(Location location, double distance);
     }
 
     public static void setLocationServiceDisplay(LocationServiceDisplay _locationServiceDisplay){
         locationServiceDisplay = _locationServiceDisplay;
+    }
+
+    private void checkEnabled() {
+        Log.i(TAG,"Enabled: "
+                + locationManager
+                .isProviderEnabled(LocationManager.GPS_PROVIDER));
+        Log.i(TAG, "Enabled: "
+                + locationManager
+                .isProviderEnabled(LocationManager.NETWORK_PROVIDER));
     }
 
 }
