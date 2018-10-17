@@ -8,11 +8,11 @@
         <attr name="maxValue" format="float" />
         <attr name="intScale" format="boolean" />
         <attr name="initialValue" format="float" />
-        <attr name="faceColor" format="integer" />
-        <attr name="scaleColor" format="integer" />
-        <attr name="needleColor" format="integer" />
-        <attr name="rimColor" format="integer" />
-        <attr name="labelColor" format="integer" />
+        <attr name="faceColor" format="color" />
+        <attr name="scaleColor" format="color" />
+        <attr name="needleColor" format="color" />
+        <attr name="rimColor" format="color" />
+        <attr name="labelColor" format="color" />
         <attr name="topText" format="string" />
         <attr name="labelTextSize" format="float" />
         <attr name="textSize" format="float" />

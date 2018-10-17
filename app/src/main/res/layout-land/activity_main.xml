@@ -14,12 +14,15 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="10dp"
-        speedmeter:labelTextSize="26"
+        speedmeter:labelTextSize="32"
         speedmeter:maxValue="240"
         speedmeter:unitsPerNick="5"
         speedmeter:longNickInterval="4"
         speedmeter:nicksCount="68"
-        speedmeter:topText="Km/h"/>
+        speedmeter:topText="Km/h"
+        speedmeter:scaleColor="#e30202"
+        speedmeter:rimColor="#000000"
+        speedmeter:labelColor="#1740e3"/>
 
 
     <LinearLayout
