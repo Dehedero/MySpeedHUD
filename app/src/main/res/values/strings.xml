@@ -5,6 +5,12 @@
     <string name="invalid_min_max">Sum of min (%1$f) and max (%2$f) should be a multiple of value per nick (%3$f). Scale may be distorted.</string>
     <string name="scale_ok">Scale should be okay.</string>
 
+    <string name="HUD_On">HUD is On</string>
+    <string name="HUD_Off">HUD id Off</string>
+
+    <string name="analog">Analog view</string>
+    <string name="digital">Digital view</string>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
