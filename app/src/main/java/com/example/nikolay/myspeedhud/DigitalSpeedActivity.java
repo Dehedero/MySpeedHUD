@@ -21,7 +21,7 @@ public class DigitalSpeedActivity extends AppCompatActivity implements MyLocatio
 
     private double speed = 0, distance = 0;
 
-    float screenBrightness = 1f;
+    float screenBrightness = 1f;q
 
     public  CompoundButton.OnCheckedChangeListener chekedChangedListener = new CompoundButton.OnCheckedChangeListener() {
         @Override
