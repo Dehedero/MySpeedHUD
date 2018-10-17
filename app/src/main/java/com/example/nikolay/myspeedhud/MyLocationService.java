@@ -17,6 +17,7 @@ public class MyLocationService extends Service {
     private static final String TAG = MyLocationService.class.getSimpleName();
 
     private static LocationServiceDisplay locationServiceDisplay;
+    private static LocationServiceDisplay secondaryLocationServiceDisplay;
     private static final int FASTEST_INTERVAL = 2 * 1000;
     private static final float MINIMAL_DISTANCE = 10f;
     private static double speed = 0;
@@ -39,6 +40,17 @@ public class MyLocationService extends Service {
                 }
 
                 locationServiceDisplay.update(speed, distance);
+            }
+
+            if(secondaryLocationServiceDisplay != null && location != null){
+
+                if(location.hasSpeed()){
+                    speed = location.getSpeed();
+                } else {
+                    speed = 0;
+                }
+
+                secondaryLocationServiceDisplay.update(speed, distance);
             }
 
             Log.d(TAG, "Location changed");
@@ -84,6 +96,8 @@ public class MyLocationService extends Service {
             // for ActivityCompat#requestPermissions for more details.
 
         }
+        distance = intent.getDoubleExtra(MainActivity.dist, 0)*1000;
+
         //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, FASTEST_INTERVAL, MINIMAL_DISTANCE, locationListener);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, FASTEST_INTERVAL, MINIMAL_DISTANCE, locationListener);
 
@@ -109,6 +123,10 @@ public class MyLocationService extends Service {
 
     public static void setLocationServiceDisplay(LocationServiceDisplay _locationServiceDisplay){
         locationServiceDisplay = _locationServiceDisplay;
+    }
+
+    public static void setSecondaryLocationServiceDisplay(LocationServiceDisplay _locationServiceDisplay){
+        secondaryLocationServiceDisplay = _locationServiceDisplay;
     }
 
 

@@ -4,14 +4,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="bottom"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
     <com.example.nikolay.myspeedhud.SpeedmeterView
         android:id="@+id/speedmeter"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_gravity="center"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal|bottom"
         android:layout_marginTop="10dp"
         speedmeter:labelTextSize="26"
         speedmeter:maxValue="240"
@@ -19,5 +21,28 @@
         speedmeter:longNickInterval="4"
         speedmeter:nicksCount="68"
         speedmeter:topText="Km/h"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <ToggleButton
+            android:id="@+id/hudToggle"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:textOff="@string/HUD_Off"
+            android:textOn="@string/HUD_On"/>
+
+        <Button
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:id="@+id/btn_change_mod"
+            android:text="@string/digital"/>
+
+    </LinearLayout>
 
 </LinearLayout>
