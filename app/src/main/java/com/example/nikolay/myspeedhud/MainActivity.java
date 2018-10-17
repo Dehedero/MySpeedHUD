@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements MyLocationService
             startService(intent);
             MyLocationService.setLocationServiceDisplay(this);
         } else {
-            Toast.makeText(this, "Dont get permissions", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Dont get permission", Toast.LENGTH_LONG).show();
         }
 
         speedmeter = findViewById(R.id.speedmeter);
