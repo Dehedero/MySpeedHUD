@@ -1,23 +1,30 @@
 package com.example.nikolay.myspeedhud;
 
+import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 
 public class MainActivity extends AppCompatActivity implements MyLocationService.LocationServiceDisplay, View.OnClickListener {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     private  SpeedmeterView speedmeter;
     private ToggleButton toggleButton;
     private double lastDistance = 0;
     private double lastSpeed = 0;
     private float screenBrightness;
     private Button btnChangeMod;
+    private int orientation;
     public static final String dist = "LASR_DISTANCE";
 
     public  CompoundButton.OnCheckedChangeListener chekedChangedListener = new CompoundButton.OnCheckedChangeListener() {
@@ -50,11 +57,17 @@ public class MainActivity extends AppCompatActivity implements MyLocationService
             lastDistance = savedInstanceState.getDouble(dist, 0);
         }
 
+        orientation = getResources().getConfiguration().orientation;
+
         //TODO Permissions check
         Intent intent = new Intent(this, MyLocationService.class);
         intent.putExtra(dist, lastDistance);
-        startService(intent);
-        MyLocationService.setLocationServiceDisplay(this);
+        if(checkPermissions()) {
+            startService(intent);
+            MyLocationService.setLocationServiceDisplay(this);
+        } else {
+            Toast.makeText(this, "Dont get permission", Toast.LENGTH_LONG).show();
+        }
 
         speedmeter = findViewById(R.id.speedmeter);
         speedmeter.setdistance(lastDistance, "Km");
@@ -64,13 +77,20 @@ public class MainActivity extends AppCompatActivity implements MyLocationService
         btnChangeMod.setOnClickListener(this);
     }
 
-    private void checkPermissions(){
-        //todo Permissions check
+    private boolean checkPermissions(){
+        if(hasPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) && hasPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION)){
+            return true;
+        }
+        return false;
     }
 
     @Override
     protected void onDestroy() {
-        stopService(new Intent(this, MyLocationService.class));
+        if(orientation != getResources().getConfiguration().orientation) {
+            Toast.makeText(this, "upside inside out", Toast.LENGTH_LONG).show();
+        }else {
+            stopService(new Intent(this, MyLocationService.class));
+        }
         super.onDestroy();
     }
 
@@ -119,4 +139,16 @@ public class MainActivity extends AppCompatActivity implements MyLocationService
         intent.putExtra(DigitalSpeedActivity.speedLast, lastSpeed);
         startActivity(intent);
     }
+
+    public static boolean hasPermission(Context context, String permission) {
+
+        int res = context.checkCallingOrSelfPermission(permission);
+
+        Log.v(TAG, "permission: " + permission + " = \t\t" +
+                (res == PackageManager.PERMISSION_GRANTED ? "GRANTED" : "DENIED"));
+
+        return res == PackageManager.PERMISSION_GRANTED;
+
+    }
+
 }

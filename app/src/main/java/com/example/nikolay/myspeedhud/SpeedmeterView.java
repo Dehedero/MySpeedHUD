@@ -217,7 +217,6 @@ public class SpeedmeterView extends View {
         for (int i = 0; i < nicksCount; i += longNickInterval) {
             float value = nicksToUnits(i);
             if (value >= minValue && value <= maxValue) {
-                //TODO подробнее
                 float scaleAngle = i * degreesPerNick;
                 float scaleAngleRads = (float) Math.toRadians(scaleAngle);
                 Log.d(TAG, "i = " + i + ", angle = " + scaleAngle + ", value = " + value);
