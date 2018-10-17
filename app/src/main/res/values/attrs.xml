@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SpeedmeterView">
+        <attr name="nicksCount" format="integer" />
+        <attr name="unitsPerNick" format="float" />
+        <attr name="longNickInterval" format="integer" />
+        <attr name="minValue" format="float" />
+        <attr name="maxValue" format="float" />
+        <attr name="intScale" format="boolean" />
+        <attr name="initialValue" format="float" />
+        <attr name="faceColor" format="integer" />
+        <attr name="scaleColor" format="integer" />
+        <attr name="needleColor" format="integer" />
+        <attr name="rimColor" format="integer" />
+        <attr name="labelColor" format="integer" />
+        <attr name="topText" format="string" />
+        <attr name="labelTextSize" format="float" />
+        <attr name="textSize" format="float" />
+
+    </declare-styleable>
+</resources>

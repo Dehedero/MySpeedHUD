@@ -1,27 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:speedmeter="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:orientation="vertical">
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:id="@+id/tv_main" />
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        android:id="@+id/tv_net" />
+    android:orientation="vertical"
+    tools:context=".MainActivity">
 
     <com.example.nikolay.myspeedhud.SpeedmeterView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/speedmeter"/>
+        android:id="@+id/speedmeter"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="10dp"
+        speedmeter:labelTextSize="26"
+        speedmeter:maxValue="240"
+        speedmeter:unitsPerNick="5"
+        speedmeter:longNickInterval="4"
+        speedmeter:nicksCount="68"
+        speedmeter:topText="Km/h"/>
 
 </LinearLayout>
